@@ -90,6 +90,7 @@ from .user_directory import UserDirectoryStore
 from .user_erasure_store import UserErasureStore
 from .admin_rooms import AdminRoomsWorkerStore
 from .messages_count import MessaggesCountWorkerStore
+from .failed_logins import FailedLoginsWorkerStore
 
 if TYPE_CHECKING:
     from synapse.server import HomeServer
@@ -119,6 +120,7 @@ class UserPaginateResponse:
 class DataStore(
     AdminRoomsWorkerStore,
     MessaggesCountWorkerStore,
+    FailedLoginsWorkerStore,
     EventsBackgroundUpdatesStore,
     ExperimentalFeaturesStore,
     DeviceStore,

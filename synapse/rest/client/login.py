@@ -353,7 +353,7 @@ class LoginRestServlet(RestServlet):
             login_submission.get("user"),
         )
         canonical_user_id, callback = await self.auth_handler.validate_login(
-            login_submission, ratelimit=True
+            login_submission, request_info, ratelimit=True
         )
         result = await self._complete_login(
             canonical_user_id,

@@ -62,7 +62,7 @@ from synapse.handlers.ui_auth import (
 from synapse.handlers.ui_auth.checkers import UserInteractiveAuthChecker
 from synapse.http import get_request_user_agent
 from synapse.http.server import finish_request, respond_with_html
-from synapse.http.site import SynapseRequest
+from synapse.http.site import SynapseRequest, RequestInfo
 from synapse.logging.context import defer_to_thread
 from synapse.metrics import SERVER_NAME_LABEL
 from synapse.metrics.background_process_metrics import run_as_background_process
@@ -1135,6 +1135,7 @@ class AuthHandler:
     async def validate_login(
         self,
         login_submission: dict[str, Any],
+        request_info: RequestInfo,
         ratelimit: bool = False,
         is_reauth: bool = False,
     ) -> tuple[str, Callable[["LoginResponse"], Awaitable[None]] | None]:
@@ -1287,6 +1288,11 @@ class AuthHandler:
                 await self._failed_login_attempts_ratelimiter.can_do_action(
                     None, qualified_user_id.lower()
                 )
+            # Updating failed_logins table in database to store 
+            # user login failier.
+            username = login_submission.get('identifier').get('user')
+            user_id = UserID(username, self.server_name).to_string()
+            await self.store.store_failed_login(user_id, request_info)
             raise
 
     async def _validate_userid_login(
