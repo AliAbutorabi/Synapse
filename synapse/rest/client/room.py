@@ -418,6 +418,7 @@ class RoomSendEventRestServlet(TransactionRestServlet):
         self.auth = hs.get_auth()
         self._max_event_delay_ms = hs.config.server.max_event_delay_ms
         self._msc4354_enabled = hs.config.experimental.msc4354_enabled
+        self.store = hs.get_datastores().main
 
     def register(self, http_server: HttpServer) -> None:
         # /rooms/$roomid/send/$event_type[/$txn_id]
@@ -502,6 +503,10 @@ class RoomSendEventRestServlet(TransactionRestServlet):
     ) -> tuple[int, JsonDict]:
         requester = await self.auth.get_user_by_req(request, allow_guest=True)
         set_tag("txn_id", txn_id)
+        
+        user_id = requester.user.to_string()
+        if event_type == 'm.room.message':
+            await self.store.store_messages_count(user_id)
 
         return await self.txns.fetch_or_execute_request(
             request,

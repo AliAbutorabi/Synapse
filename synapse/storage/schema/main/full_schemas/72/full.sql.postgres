@@ -952,7 +952,8 @@ CREATE TABLE users (
     user_type text,
     deactivated smallint DEFAULT 0 NOT NULL,
     shadow_banned boolean,
-    consent_ts bigint
+    consent_ts bigint,
+    message_count bigint
 );
 CREATE TABLE users_in_public_rooms (
     user_id text NOT NULL,
