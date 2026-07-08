@@ -129,6 +129,7 @@ from synapse.rest.admin.users import (
     UserTokenRestServlet,
     WhoisRestServlet,
 )
+from synapse.rest.admin.admin_rooms import AdminRoomsServLetV4
 from synapse.types import JsonDict, RoomStreamToken, TaskStatus
 from synapse.util import SYNAPSE_VERSION
 
@@ -350,6 +351,7 @@ def register_servlets(hs: "HomeServer", http_server: HttpServer) -> None:
     ScheduledTasksRestServlet(hs).register(http_server)
     AdminRoomHierarchy(hs).register(http_server)
     EventRestServlet(hs).register(http_server)
+    AdminRoomsServLetV4(hs).register(http_server)
 
 
 def register_servlets_for_client_rest_resource(

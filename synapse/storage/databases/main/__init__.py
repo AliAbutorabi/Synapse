@@ -88,6 +88,7 @@ from .transactions import TransactionWorkerStore
 from .ui_auth import UIAuthStore
 from .user_directory import UserDirectoryStore
 from .user_erasure_store import UserErasureStore
+from .admin_rooms import AdminRoomsWorkerStore
 
 if TYPE_CHECKING:
     from synapse.server import HomeServer
@@ -115,6 +116,7 @@ class UserPaginateResponse:
 
 
 class DataStore(
+    AdminRoomsWorkerStore,
     EventsBackgroundUpdatesStore,
     ExperimentalFeaturesStore,
     DeviceStore,
